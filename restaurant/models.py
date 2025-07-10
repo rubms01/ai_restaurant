@@ -64,7 +64,7 @@ class Restaurant(models.Model):
     )
     tags = models.ManyToManyField("Tag", blank=True)  # M:N 관계
     region = models.ForeignKey(
-        "지역",
+        "restaurant.Region",
         on_delete=models.SET_NULL,  # 참조된 지역 삭제시 Null로 설정됨.
         null=True,
         blank=True,
@@ -169,7 +169,9 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    restaurant = models.ForeignKey(Restaurant, max_length=100)
+    restaurant = models.ForeignKey(
+        Restaurant, max_length=100, on_delete=models.SET_NULL
+    )
     social_channel = models.ForeignKey(
         "SocialChannel", on_delete=models.SET_NULL, blank=True, null=True
     )
