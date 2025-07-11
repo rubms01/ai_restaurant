@@ -59,8 +59,10 @@ class Restaurant(models.Model):
     end_time = models.TimeField("영업 종료 시간", null=True, blank=True)
     last_order_time = models.TimeField("라스트 오더 시간", null=True, blank=True)
     category = models.ForeignKey(
-        "RestaurantCategory",
+        "restaurant.RestaurantCategory",
         on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     tags = models.ManyToManyField("Tag", blank=True)  # M:N 관계
     region = models.ForeignKey(
@@ -142,6 +144,7 @@ class RestaurantImage(models.Model):
 
 
 class RestaurantMenu(models.Model):
+    # 레스토랑을 참조함. 레스토랑 삭제되면 메뉴도 삭제
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     name = models.CharField("이름", max_length=100)
     price = models.PositiveBigIntegerField("가격", default=0)
@@ -169,9 +172,7 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    restaurant = models.ForeignKey(
-        Restaurant, max_length=100, on_delete=models.SET_NULL
-    )
+    restaurant = models.ForeignKey(Restaurant, max_length=100, on_delete=models.CASCADE)
     social_channel = models.ForeignKey(
         "SocialChannel", on_delete=models.SET_NULL, blank=True, null=True
     )
@@ -184,6 +185,14 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.author} : {self.title}"
+
+    @property
+    def restaurant_name(self):
+        return self.restaurant.name
+
+    @property
+    def contetnt_partial(self):
+        return self.content[:20]
 
 
 class ReviewImage(models.Model):
