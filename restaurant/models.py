@@ -2,6 +2,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.forms import ValidationError
 
+# 배포 전 커밋
+
 
 class Article(models.Model):
     title = models.CharField(max_length=100, db_index=True)
