@@ -1,6 +1,6 @@
 Django>=4.2.0
 djangorestframework>=3.16.0
-mysqlclient==2.2.0
+
 pillow==11.3.0
 python-dotenv==1.1.1
 boto3==1.39.9
